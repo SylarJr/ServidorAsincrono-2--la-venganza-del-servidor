@@ -46,9 +46,11 @@ public class Mensajes implements Runnable {
                 } else {
                     // Si no es mensaje privado, se envía a todos los clientes conectados
                     for (UnCliente cliente : ServidorAsincrono.Cliente.values()) {
-                        cliente.salida.writeUTF(mensaje);
+                        if (cliente.entrada != this.entrada) {
+                            cliente.salida.writeUTF(mensaje);
+                        }
                     }
-                }
+                }   
             }
         } catch (IOException ex) {
             System.out.println("Error en la lectura del mensaje: " + ex.getMessage());
