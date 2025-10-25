@@ -37,17 +37,47 @@ public class ParaMandar implements Runnable {
                     case "/login":
                     //por ahora no hay sistema de sesiones
                     if(partes.length>= 2){
-                        this.username = partes[2]
+                        this.username = partes[2];
                     }
+                    this.username = partes[1];
                     this.sesionIniciada = true;
-                    this.
+                    
+                    break;
+                    case "/register":
+                    //por ahora no hay sistema de sesiones
+
                     break;
                  
                     default:
+                    System.out.println("comando Incorrecto o desconocido, escribe /help para ver los comandos disponibles");
                         break;
                  }
+                } else{
+                    if (sesionIniciada){
+                        try{
+                            salida.writeUTF(username + ": " + mensaje);
+                            salida.flush();
+                        }catch(IOException e){
+                            System.out.println("Error al enviar el mensaje: " + e.getMessage());
+                        }
+                    }else{
+                        if(mensajesEnviados < LimiteMensajes){
+                            try{
+                                salida.writeUTF("Anonimo: " + mensaje);
+                                salida.flush();
+                                mensajesEnviados++;
+                                System.out.println("Te quedan " + (LimiteMensajes - mensajesEnviados) + " mensajes antes de iniciar sesion.");
+                                
+                            }catch(IOException e){
+                                System.out.println("Error al enviar el mensaje: " + e.getMessage());
+                            }
+                        } else {
+                            System.out.println("Has alcanzado el límite de mensajes sin iniciar sesión. Por favor, inicia sesión para continuar enviando mensajes, Nadie ve lo que haces ahora.");
+                        }
+                    }
                 }
             } catch (IOException ex) {
+                System.out.println("Error leyendo del teclado: " + ex.getMessage());
             }
 
         }
