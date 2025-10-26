@@ -35,16 +35,39 @@ public class ParaMandar implements Runnable {
                         break;
 
                     case "/login":
-                    //por ahora no hay sistema de sesiones
-                    if(partes.length>= 2){
-                        this.username = partes[2];
-                    }
-                    this.username = partes[1];
-                    this.sesionIniciada = true;
-                    
+                        try {
+                            System.out.println("ingrese su usuario: ");
+                            String usuario = teclado.readLine();
+                            System.out.println("ingrese su contraseña: ");
+                            String contraseña = teclado.readLine();
+                            boolean exito = SesionRegistro.iniciarSesion(usuario, contraseña);
+                            if (exito){
+                                System.out.println("sesion iniciada con exito, bienvenido " + usuario + " ya puedes mandar mensajes ilimitados");
+                            }else {
+                                System.out.println("Error al iniciar sesion, usuario o contraseña incorrectos");
+                            }
+                        }catch (IOException e){
+                            System.out.println("Error al leer del teclado: " + e.getMessage());
+                        }
                     break;
+
+                    //registro de nuevo usuario
                     case "/register":
-                    //por ahora no hay sistema de sesiones
+                    try{
+                 System.out.println("Diga su nombre de usuario: ");
+                    String nuevoUsuario = teclado.readLine();
+                    System.out.println("Diga su contraseña: ");
+                    String nuevaContraseña = teclado.readLine();
+                    boolean exito = SesionRegistro.registrarUsuario(nuevoUsuario, nuevaContraseña);
+                    if (exito) {
+                        System.out.println("Usuario registrado con éxito.");
+                    } else {
+                        System.out.println("Error al registrar el usuario. Inténtelo de nuevo.");
+
+                  } 
+                }catch(IOException e){
+                    System.out.println("Error al leer del teclado: " + e.getMessage());
+                  }
 
                     break;
                  
