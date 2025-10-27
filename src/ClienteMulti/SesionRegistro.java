@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 public class SesionRegistro {
    
-    private static final String DB_URL = "jdbc:sqlite:C:/Users/Juan/Documents/Proyectos/Servidor Asincrono/ServidorAsincrono/src/ClienteMulti/Usuarios.db";
+    private static final String DB_URL = "jdbc:sqlite:data/Usuarios.db";
     
     public static boolean registrarUsuario(String Usuario, String Contraseña) {
         String sql = "INSERT INTO Usuarios(Usuario, Contraseña) VALUES(?,?)";

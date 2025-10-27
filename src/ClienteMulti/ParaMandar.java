@@ -43,6 +43,9 @@ public class ParaMandar implements Runnable {
                             boolean exito = SesionRegistro.iniciarSesion(usuario, contraseña);
                             if (exito){
                                 System.out.println("sesion iniciada con exito, bienvenido " + usuario + " ya puedes mandar mensajes ilimitados");
+                                this.username = usuario;
+                                this.sesionIniciada = true;
+                                this.mensajesEnviados = 0;
                             }else {
                                 System.out.println("Error al iniciar sesion, usuario o contraseña incorrectos");
                             }
