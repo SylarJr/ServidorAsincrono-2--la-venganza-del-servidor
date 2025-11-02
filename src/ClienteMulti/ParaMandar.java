@@ -16,8 +16,20 @@ public class ParaMandar implements Runnable {
     private boolean enPartida = false;
     private String rival = null;
     private boolean invitacionPendiente = false;
+
+    //getter  de invitacionPendiente
+    public void setInvitacionPendiente(boolean invitacionPendiente) {
+        this.invitacionPendiente = invitacionPendiente;
+    }
+    // hasta aca
+
     private String invitador = null;
+    public void setInvitador(String invitador) {
+        this.invitador = invitador;
+    }
+
     private Partida partida = null;
+    
 
     Comandos comandos = new Comandos();
 
@@ -75,12 +87,10 @@ public class ParaMandar implements Runnable {
                         System.out.println("Error al registrar el usuario. Inténtelo de nuevo.");
 
                   } 
-                }catch(IOException e){
+                 }catch(IOException e){
                     System.out.println("Error al leer del teclado: " + e.getMessage());
                   }
-
                     break;
-
                     case "/invitar":
                         if (!sesionIniciada) {
                             System.out.println("Debes de iniciar iniciar sesion");
@@ -129,13 +139,14 @@ public class ParaMandar implements Runnable {
                     System.out.println("comando Incorrecto o desconocido, escribe /help para ver los comandos disponibles");
                         break;
                  }
-
-
-
                 } else{
                     if (sesionIniciada){
                         try{
+                            if(enPartida && partida != null){
+                                salida.writeUTF("/privado" + rival + " " + mensaje);
+                            }else{
                             salida.writeUTF(username + ": " + mensaje);
+                                 }
                             salida.flush();
                         }catch(IOException e){
                             System.out.println("Error al enviar el mensaje: " + e.getMessage());

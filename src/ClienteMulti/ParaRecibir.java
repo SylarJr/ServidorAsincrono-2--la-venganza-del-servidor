@@ -6,8 +6,10 @@ import java.net.Socket;
 
 public class ParaRecibir implements Runnable {
    final DataInputStream entrada;
-    public ParaRecibir(Socket s) throws IOException {
+   private ParaMandar paraMandar;
+    public ParaRecibir(Socket s, ParaMandar paraMandar) throws IOException {
         entrada = new DataInputStream(s.getInputStream());
+        this.paraMandar = paraMandar;
     }
 
     @Override
@@ -17,8 +19,20 @@ public class ParaRecibir implements Runnable {
         while(true){
             try {
                 mensaje = entrada.readUTF();
-     
-                System.out.println(mensaje);
+                if (mensaje.startsWith("INVITACION_DE:")){
+                    String invitador = mensaje.substring("INVITACION_DE:".length());
+                    paraMandar.setInvitacionPendiente(true);
+                    paraMandar.setInvitador(invitador);
+                    System.out.println("Has recibido una invitacion de " + invitador + "Escribes /aceptar o /rechar");
+                }else if(mensaje.startsWith("/privado")){
+                    // Mensajes privados
+                    String contenido = mensaje.substring(9);
+                    System.out.println("mesaje de tu rival: "+ contenido);
+                }else{
+                    System.out.println(mensaje);
+                }
+                
+                
             } catch (IOException ex) {
             }
         }

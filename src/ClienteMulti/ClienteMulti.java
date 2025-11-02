@@ -13,7 +13,7 @@ public class ClienteMulti {
         Thread hiloMandar = new Thread(Paramandar);
         hiloMandar.start();
 
-        ParaRecibir paraRecibir = new ParaRecibir(s);
+        ParaRecibir paraRecibir = new ParaRecibir(s, Paramandar);
         Thread hiloRecibir = new Thread(paraRecibir);
         hiloRecibir.start();
     }
