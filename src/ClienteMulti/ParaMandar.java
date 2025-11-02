@@ -13,6 +13,12 @@ public class ParaMandar implements Runnable {
     private String username ;
     private byte mensajesEnviados =0;
     private byte LimiteMensajes =3;
+    private boolean enPartida = false;
+    private String rival = null;
+    private boolean invitacionPendiente = false;
+    private String invitador = null;
+    private Partida partida = null;
+
     Comandos comandos = new Comandos();
 
     public ParaMandar(Socket s) throws IOException {
@@ -26,6 +32,7 @@ public class ParaMandar implements Runnable {
             String mensaje;
             try {
                 mensaje = teclado.readLine();
+
                 if (mensaje.startsWith("/")){
                  String [] partes = mensaje.split("\\s+", 3);
                  String cmd = partes [0].toLowerCase();
@@ -33,7 +40,7 @@ public class ParaMandar implements Runnable {
                     case "/help":
                         comandos.mostrarAyuda();
                         break;
-
+                        //login de usuario existente
                     case "/login":
                         try {
                             System.out.println("ingrese su usuario: ");
@@ -73,11 +80,58 @@ public class ParaMandar implements Runnable {
                   }
 
                     break;
+
+                    case "/invitar":
+                        if (!sesionIniciada) {
+                            System.out.println("Debes de iniciar iniciar sesion");
+                            break;
+                        }
+                        if(enPartida){
+                            System.out.println("ya estas en una partida con " + rival);
+                        }
+                         if (partes.length < 2){
+                            System.out.println("EL comando se usa asi: /invitar a jugar -nombre de usuario-");
+                         }
+                         String usuarioInvitado = partes[1];
+                         salida.writeUTF("/invitar" + usuarioInvitado);
+                         salida.flush();
+                         System.out.println("Se ha invitado a "+ usuarioInvitado);
+                        break;
+
+                    case "/aceptar":
+                    if(invitacionPendiente && invitador != null){
+                        salida.writeUTF("/aceptar" + invitador);
+                        salida.flush();
+                        enPartida = true;
+                        rival = invitador;
+                        partida = new Partida(username, rival);
+                        invitacionPendiente = false;
+                        invitador = null;
+                        System.out.println("Has aceptado, Es hora de jugar ");
+                        System.out.println(partida.mostrarTablero());
+
+                    } else {
+                        System.out.println("no hay invitaciones pendientes");
+                    }
+                    case "/rechazar":
+                    if(invitacionPendiente && invitador != null){
+                        salida.writeUTF("/denegar " + invitador);
+                        salida.flush();
+                        invitacionPendiente = false;
+                        invitador = null;
+                        System.out.println("Has rechazado la invitacion ");
+                    }else{
+                        System.out.println("no tienes invitaciones pendientes");
+                    }
+                    break;
                  
                     default:
                     System.out.println("comando Incorrecto o desconocido, escribe /help para ver los comandos disponibles");
                         break;
                  }
+
+
+
                 } else{
                     if (sesionIniciada){
                         try{

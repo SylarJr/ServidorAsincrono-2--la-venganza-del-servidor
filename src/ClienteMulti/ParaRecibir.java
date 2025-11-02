@@ -17,6 +17,7 @@ public class ParaRecibir implements Runnable {
         while(true){
             try {
                 mensaje = entrada.readUTF();
+     
                 System.out.println(mensaje);
             } catch (IOException ex) {
             }
