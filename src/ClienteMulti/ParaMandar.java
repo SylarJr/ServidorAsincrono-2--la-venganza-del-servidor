@@ -30,11 +30,11 @@ public class ParaMandar implements Runnable {
                  String [] partes = mensaje.split("\\s+", 3);
                  String cmd = partes [0].toLowerCase();
                  switch (cmd) {
-                    case "/help":
+                    case "/ayuda":
                         comandos.mostrarAyuda();
                         break;
 
-                    case "/login":
+                    case "/entrar":
                         try {
                             System.out.println("ingrese su usuario: ");
                             String usuario = teclado.readLine();
@@ -55,7 +55,7 @@ public class ParaMandar implements Runnable {
                     break;
 
                     //registro de nuevo usuario
-                    case "/register":
+                    case "/registrar":
                     try{
                  System.out.println("Diga su nombre de usuario: ");
                     String nuevoUsuario = teclado.readLine();
