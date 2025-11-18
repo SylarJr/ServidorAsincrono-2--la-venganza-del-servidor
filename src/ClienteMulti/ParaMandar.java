@@ -8,34 +8,39 @@ import java.net.Socket;
 
 public class ParaMandar implements Runnable {
     final BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
-    final DataOutputStream salida ;
+    
   
     Comandos comandos = new Comandos();
 
-    public ParaMandar(Socket s) throws IOException {
-        this.salida = new DataOutputStream(s.getOutputStream());
-    }
+    public ParaMandar(Socket s) throws IOException {}
+    
 
 
     @Override
     public void run() {
-        while ( true ){
-            String mensaje;
+       while (true) {
             try {
-                mensaje = teclado.readLine();
+                String mensaje = teclado.readLine(); 
+
+             
+                if (ClienteMulti.socketActual == null || ClienteMulti.socketActual.isClosed()) {
+                    System.out.println("⚠ No hay conexión. Mensaje no enviado.");
+                    continue; 
+                }
+
                 
                 if (mensaje.equalsIgnoreCase("/ayuda")) {
-                   
                     comandos.mostrarAyuda();
                 } else {
-                   
-                    salida.writeUTF(mensaje);
-                    salida.flush();
+                    
+                    DataOutputStream salidaTemp = new DataOutputStream(ClienteMulti.socketActual.getOutputStream());
+                    salidaTemp.writeUTF(mensaje);
+                    salidaTemp.flush();
                 }
 
             } catch (IOException ex) {
-                System.out.println("Error leyendo del teclado o enviando: " + ex.getMessage());
-                break; 
+                System.out.println("Error al intentar enviar (Servidor caído): " + ex.getMessage());
+             
             }
         }
     }
