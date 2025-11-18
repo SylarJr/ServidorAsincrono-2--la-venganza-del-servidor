@@ -110,7 +110,7 @@ public class ManejadorComandos {
                 invitador.salida.writeUTF("Eres 'X'. ¡Es tu turno! Usa /jugar <fila> <columna>");
                 miCliente.salida.writeUTF("Eres 'O'. Espera el turno de 'X'.");
                 
-                nuevoJuego.enviarTablero(); 
+                nuevoJuego.enviarTablero();
                 break;
             case "/rechazar":
                 if (miCliente.estado != ClienteEstado.Estado.Invitado) {
