@@ -7,55 +7,49 @@ import java.io.IOException;
 
 public class Mensajes implements Runnable {
  private DataInputStream entrada;
+ private ManejadorComandos manejador;
+ private UnCliente miCliente;
+
 
     // Constructor que recibe el flujo de entrada del cliente
-   public Mensajes(DataInputStream entrada) {
+   public Mensajes(DataInputStream entrada, UnCliente miCliente) {
         this.entrada = entrada;
+        this.miCliente = miCliente;
+        this.manejador = new ManejadorComandos();
     }
 
     @Override
     public void run() {
-        String mensaje;
         try {
             while (true) {
-                mensaje = entrada.readUTF();
+               String mensaje = entrada.readUTF();
+                // Si el mensaje llega vacío o null, lo ignoramos
+                if (mensaje == null || mensaje.trim().isEmpty()) continue;
 
-                if (mensaje.startsWith("@")) {
-                    // Dividimos el mensaje en partes (por ejemplo: "@1 Hola")
-                    String[] partes = mensaje.split(" ", 2);
-
-                    if (partes.length < 2) {
-                        // evita errores si no hay mensaje
-                        continue;
-                    }
-
-                    // Obtenemos el número de cliente destinatario (quitando "@")
-                    String Aquien = partes[0].substring(1);
-                    int AquienNumerico = Integer.parseInt(Aquien);
-
-                    // Buscamos el cliente correspondiente en el mapa del servidor
-                    UnCliente cliente = ServidorAsincrono.Cliente.get(String.valueOf(AquienNumerico));
-
-                    if (cliente != null) {
-                        // Enviamos el mensaje solo al destinatario
-                        cliente.salida.writeUTF(partes[1]); // enviamos solo el mensaje, sin "@1"
-                    } else {
-                        System.out.println("Cliente " + AquienNumerico + " no encontrado.");
-                    }
-
-                } else {
-                    // Si no es mensaje privado, se envía a todos los clientes conectados
-                    for (UnCliente cliente : ServidorAsincrono.Cliente.values()) {
-                        if (cliente.entrada != this.entrada) {
-                            cliente.salida.writeUTF(mensaje);
-                        }
-                    }
-                }   
+                switch (miCliente.estado) {
+                    case Conectado:
+                        // Aquí SOLO funcionan /entrar y /registrar
+                        manejador.procesarConectado(miCliente, mensaje);
+                        break;
+                        
+                    case Libre:
+                    case Invitado:
+                        // Aquí funciona el chat normal y /invitar, /ayuda
+                        manejador.procesarMensajeChat(miCliente, mensaje);
+                        break;
+                        
+                    case Jugando:
+                        // Aquí funciona /jugar y el chat privado
+                        manejador.procesarMensajeJuego(miCliente, mensaje);
+                        break;
+                        
+                    default:
+                        System.out.println("Error: Estado desconocido " + miCliente.estado);
+                }
             }
         } catch (IOException ex) {
-            System.out.println("Error en la lectura del mensaje: " + ex.getMessage());
+            manejador.procesarDesconexion(miCliente);
         }
     }
-
     
 }

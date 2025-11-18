@@ -5,8 +5,10 @@ import java.util.HashMap;
 
 import ClienteMulti.BaseDeDatos;
 
-public class ServidorAsincrono {static HashMap <String, UnCliente> Cliente = new HashMap <String,UnCliente>();
-    
+public class ServidorAsincrono {
+    static HashMap <String, UnCliente> Cliente = new HashMap <String,UnCliente>();
+    static HashMap <String, JuegoGato> juegosActivos = new HashMap <String, JuegoGato>();
+
     public static void main(String[] args) throws IOException {
         BaseDeDatos.inicializar();
         ServerSocket servidorSocket = new ServerSocket(8080);
@@ -20,5 +22,13 @@ public class ServidorAsincrono {static HashMap <String, UnCliente> Cliente = new
             hilo.start();
             contador++;
         }
+    }
+    public static UnCliente getClientePorUsername(String username) {
+        for (UnCliente cliente : Cliente.values()) {
+            if (username.equals(cliente.username)) {
+                return cliente;
+            }
+        }
+        return null; // No se encontró
     }
 }
