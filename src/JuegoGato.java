@@ -32,7 +32,7 @@ public class JuegoGato {
     }
 
     public void enviarTablero() {
-        System.out.println("DEBUG: Intentando enviar tablero a los jugadores..."); // Log servidor
+        System.out.println("Intentando enviar tablero a los jugadores..."); // Log servidor
         
         String boardStr = "\n--- TABLERO ---\n" +
                           "  0 1 2\n" +
@@ -51,7 +51,7 @@ public class JuegoGato {
             jugadorO.salida.writeUTF(boardStr);
             jugadorO.salida.flush(); 
             
-            System.out.println("DEBUG: Tablero enviado correctamente.");
+            System.out.println("Tablero enviado correctamente.");
         } catch (IOException e) {
             System.out.println("Error enviando tablero: " + e.getMessage());
         }

@@ -83,7 +83,7 @@ public class ManejadorComandos {
                     invitado.oponente = miCliente;
                     
                     miCliente.salida.writeUTF("Invitación enviada a " + usernameInvitado + ". Esperando respuesta...");
-                    invitado.salida.writeUTF("¡" + miCliente.username + " te ha invitado a jugar 3 en Raya!");
+                    invitado.salida.writeUTF("¡" + miCliente.username + " te ha invitado a jugar 3 en Raya");
                     invitado.salida.writeUTF("Escribe /aceptar o /rechazar.");
                 }
                 break;
@@ -151,10 +151,10 @@ public class ManejadorComandos {
                 int col = Integer.parseInt(partes[2]);
                 juego.hacerMovimiento(miCliente, fila, col);
             } catch (Exception e) {
-                miCliente.salida.writeUTF("JUEGO:Comando inválido. Usa: /jugar <fila> <columna>");
+                miCliente.salida.writeUTF("Comando inválido. Usa: /jugar <fila> <columna>");
             }
         } else if (mensaje.startsWith("/")) {
-            miCliente.salida.writeUTF("JUEGO:Comando no disponible. Usa /jugar <fila> <col>.");
+            miCliente.salida.writeUTF("Comando no disponible. Usa /jugar <fila> <col>.");
         } else {
             
             juego.enviarMensaje(miCliente.username, mensaje);

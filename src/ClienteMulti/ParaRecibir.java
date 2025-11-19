@@ -21,7 +21,7 @@ public class ParaRecibir implements Runnable {
                 System.out.println(mensaje);
             }
         } catch (IOException ex) {
-            System.out.println("⚠ Se ha perdido la conexión con el servidor.");
+            System.out.println(" Se ha perdido la conexión con el servidor.");
             
         }
     } 

@@ -24,7 +24,7 @@ public class ParaMandar implements Runnable {
 
              
                 if (ClienteMulti.socketActual == null || ClienteMulti.socketActual.isClosed()) {
-                    System.out.println("⚠ No hay conexión. Mensaje no enviado.");
+                    System.out.println("No hay conexión. Mensaje no enviado.");
                     continue; 
                 }
 
